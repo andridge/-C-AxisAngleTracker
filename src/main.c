@@ -2,6 +2,9 @@
 #include <stdio.h>
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
+//#include "vendors/third-party/include/serial/serial.h"
+//#include "third-party/include/serial/serial.h"
+//#include "vendors/SERIAL/serial.h"
 
 int main() {
     GLFWwindow* window;
