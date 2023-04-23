@@ -3,6 +3,7 @@
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 #include "vendors/SERIAL/serial_port.h"
+#include <math.h>
 int main() {
     GLFWwindow* window;
 
@@ -22,18 +23,20 @@ int main() {
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
 
+
+  /*
     //
     SerialPort port;
     const char* port_name = "/dev/tty.usbserial-A9007UX1";  // Change this to the correct port name
     speed_t baudrate = 9600;
     SerialPort_init(&port, port_name, baudrate);
 
-    // Check if the object was created successfully
+     Check if the object was created successfully
     if (SerialPort_get_fd(&port) == -1) {
-        return 1;
+      return 1;
     }
 
-    /*
+  
      // use the serial_port object to read and write data
     char buffer[256];
     int bytes_read = SerialPort_read(&serial_port, buffer, sizeof(buffer));
@@ -45,75 +48,84 @@ int main() {
 
     SerialPort_destroy(&serial_port);*/
 
-    // Loop until the user closes the window
-    while (!glfwWindowShouldClose(window)) {
-        // Clear the screen
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        // Draw a cube with grid lines on the left
-        glViewport(0, 0, 500, 600);
-        glMatrixMode(GL_PROJECTION);
-        glLoadIdentity();
-        gluPerspective(45.0f, 1.0f, 0.1f, 100.0f);
-        glMatrixMode(GL_MODELVIEW);
-        glLoadIdentity();
-        gluLookAt(0.0f, 0.0f, 5.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
-         glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f); 
-        float size = 2.0f;
-        float spacing = 10.0f;
-        int num_lines = 10;
-        float start = -size / 2.0f;
-        float end = size / 2.0f;
+ // Loop until the user closes the window
+  while (!glfwWindowShouldClose(window)) {
+    // Set viewport to the entire window
+    int window_width, window_height;
+    glfwGetFramebufferSize(window, &window_width, &window_height);
+    glViewport(0, 0, window_width, window_height);
 
-        // Draw the grid lines
-glColor3f(1.0f, 1.0f, 1.0f);
-glBegin(GL_LINES);
-for (int i = 0; i <= num_lines; i++) {
-    float x = start + (i * (size / num_lines));
-    float y = start + (i * (size / num_lines));
-    float z = start + (i * (size / num_lines));
-    // X-axis lines
-    glVertex3f(x, start, start);
-    glVertex3f(x, end, start);
-    glVertex3f(x, start, end);
-    glVertex3f(x, end, end);
-    // Y-axis lines
-    glVertex3f(start, x, start);
-    glVertex3f(end, x, start);
-    glVertex3f(start, x, end);
-    glVertex3f(end, x, end);
-    // Z-axis lines
-    glVertex3f(start, start, x);
-    glVertex3f(end, start, x);
-    glVertex3f(start, end, x);
-    glVertex3f(end, end, x);
+    // Clear the screen
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Lines along the faces of the cube
-    glVertex3f(x, start, start);
-    glVertex3f(x, start, end);
-    glVertex3f(x, end, start);
-    glVertex3f(x, end, end);
-    glVertex3f(start, x, start);
-    glVertex3f(start, x, end);
-    glVertex3f(end, x, start);
-    glVertex3f(end, x, end);
-    glVertex3f(start, start, x);
-    glVertex3f(start, end, x);
-    glVertex3f(end, start, x);
-    glVertex3f(end, end, x);
-}
-glEnd();
-        // Draw the wireframe cube
-        glColor3f(1.0f, 1.0f, 1.0f);
-        glutWireCube(size);
+    // Set up projection matrix
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluPerspective(45.0f, (float)window_width / (float)window_height, 0.1f, 1000.0f);
 
-        // Swap buffers
-        glfwSwapBuffers(window);
+    // Set up modelview matrix
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+   gluLookAt(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-        // Poll for events
-        glfwPollEvents();
+    glScalef(1.5f, 1.5f, 1.5f);
+    glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
+    // Draw the grid lines
+    float size = 20.0f;
+    float step = 1.0f;
+
+      // Draw the origin point
+    glPointSize(10.0f);
+    glColor3f(1.0f, 0.0f, 0.0f);
+    glBegin(GL_POINTS);
+    glVertex3f(0.0f, 0.0f, 0.0f);
+    glEnd();
+
+    // Draw the XY plane
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glBegin(GL_LINES);
+    for (float i = -size; i <= size; i += step) {
+        glVertex3f(i, -size, 0.0f);
+        glVertex3f(i, size, 0.0f);
+        glVertex3f(-size, i, 0.0f);
+        glVertex3f(size, i, 0.0f);
     }
+    glEnd();
+
+    // Draw the XZ plane
+    glColor3f(0.5f, 0.5f, 0.5f);
+    glBegin(GL_LINES);
+    for (float i = -size; i <= size; i += step) {
+        glVertex3f(i, 0.0f, -size);
+        glVertex3f(i, 0.0f, size);
+        glVertex3f(0.0f, -size, i);
+        glVertex3f(0.0f, size, i);
+    }
+    glEnd();
+
+    // Draw the YZ plane
+    glColor3f(0.8f, 0.8f, 0.8f);
+    glBegin(GL_LINES);
+    for (float i = -size; i <= size; i += step) {
+        glVertex3f(0.0f, i, -size);
+        glVertex3f(0.0f, i, size);
+        glVertex3f(-size, 0.0f, i);
+        glVertex3f(size, 0.0f, i);
+    }
+    glEnd();
+
+    // Swap buffers
+    glfwSwapBuffers(window);
+
+    // Poll for events
+    glfwPollEvents();
+}
+
+
+
+
 
     // Clean up
     glfwTerminate();
