@@ -2,10 +2,7 @@
 #include <stdio.h>
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
-//#include "vendors/third-party/include/serial/serial.h"
-//#include "third-party/include/serial/serial.h"
-//#include "vendors/SERIAL/serial.h"
-
+#include "vendors/SERIAL/serial_port.h"
 int main() {
     GLFWwindow* window;
 
@@ -24,6 +21,29 @@ int main() {
     glfwMakeContextCurrent(window);
     // Enable depth testing
     glEnable(GL_DEPTH_TEST);
+
+    //
+    SerialPort port;
+    const char* port_name = "/dev/tty.usbserial-A9007UX1";  // Change this to the correct port name
+    speed_t baudrate = 9600;
+    SerialPort_init(&port, port_name, baudrate);
+
+    // Check if the object was created successfully
+    if (SerialPort_get_fd(&port) == -1) {
+        return 1;
+    }
+
+    /*
+     // use the serial_port object to read and write data
+    char buffer[256];
+    int bytes_read = SerialPort_read(&serial_port, buffer, sizeof(buffer));
+    printf("Read %d bytes: %s\n", bytes_read, buffer);
+
+    const char* message = "Hello, world!";
+    int bytes_written = SerialPort_write(&serial_port, message, strlen(message));
+    printf("Wrote %d bytes\n", bytes_written);
+
+    SerialPort_destroy(&serial_port);*/
 
     // Loop until the user closes the window
     while (!glfwWindowShouldClose(window)) {
