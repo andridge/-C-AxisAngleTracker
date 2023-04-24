@@ -5,28 +5,7 @@
 #include "vendors/SERIAL/serial_port.h"
 #include <math.h>
 #define BUFFER_SIZE 256
-// Function to render text on the window
-void renderText(float x, float y, const char* buffer) {
-    glMatrixMode(GL_PROJECTION);
-    glPushMatrix();
-    glLoadIdentity();
-    glOrtho(0, 1000, 0, 600, -1.0f, 1.0f);
-    glMatrixMode(GL_MODELVIEW);
-    glPushMatrix();
-    glLoadIdentity();
-    glDisable(GL_DEPTH_TEST);
-    glDisable(GL_LIGHTING);
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glRasterPos2f(x, y);
-    // Render the string using the built-in bitmap font
-    glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)buffer);
-    glEnable(GL_LIGHTING);
-    glEnable(GL_DEPTH_TEST);
-    glPopMatrix();
-    glMatrixMode(GL_PROJECTION);
-    glPopMatrix();
-    glMatrixMode(GL_MODELVIEW);
-}
+
 int main() {
     GLFWwindow* window;
 
@@ -47,7 +26,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
 
-  
+    /*
     //
     SerialPort port;
     const char* port_name = "/dev/tty.usbserial-110";  // Change this to the correct port name
@@ -60,6 +39,8 @@ int main() {
     }
     char buffer[BUFFER_SIZE];
     int bytes_read;
+    float total_angle_x = 0.0f;
+    float total_angle_y = 0.0f;
 
     while (1) {
         // Read data from the serial port
@@ -67,8 +48,10 @@ int main() {
 
         if (bytes_read > 0) {
             // Print the data received
-           // printf("Data received: %s\n", buffer);
-            renderText(10, 10, buffer);
+         // printf("Data received: %s\n", buffer);
+           float total_angle_x, total_angle_y;
+             sscanf(buffer, "Total Angle X: %f Total Angle Y: %f", &total_angle_x, &total_angle_y);
+           // renderText(10, 10, buffer);
             // Set the position for displaying the text
           // glWindowPos2f(10, 10);
 
@@ -77,27 +60,41 @@ int main() {
         }
 
         // Wait for 5 seconds
-        sleep(5);
+        usleep(100000);
     }
 
-    SerialPort_destroy(&port);
+    SerialPort_destroy(&port);*/
+SerialPort port;
+const char* port_name = "/dev/tty.usbserial-110";  // Change this to the correct port name
+speed_t baudrate = 9600;
+SerialPort_init(&port, port_name, baudrate);
 
+// Check if the object was created successfully
+if (SerialPort_get_fd(&port) == -1) {
+  return 1;
+}
 
-  
-     // use the serial_port object to read and write data
-   /* char buffer[256];
-    int bytes_read = SerialPort_read(&serial_port, buffer, sizeof(buffer));
-    printf("Read %d bytes: %s\n", bytes_read, buffer);
-
-    const char* message = "Hello, world!";
-    int bytes_written = SerialPort_write(&serial_port, message, strlen(message));
-    printf("Wrote %d bytes\n", bytes_written);
-
-    SerialPort_destroy(&serial_port);*/
-
+char buffer[BUFFER_SIZE];
+int bytes_read;
+float total_angle_x = 0.0f;
+float total_angle_y = 0.0f;
 
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
+    //
+     // Read data from the serial port
+    bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
+
+    if (bytes_read > 0) {
+        // Print the data received
+        float total_angle_x;
+        float total_angle_y;
+      //  printf("Total Angle X & Y: %f\n",buffer);
+        sscanf(buffer, "Total Angle X: %f Total Angle Y: %f", &total_angle_x, &total_angle_y);
+        printf("Total Angle X: %f\n",total_angle_x);
+        printf("Total Angle Y: %f\n",total_angle_y);
+    }
+
     // Set viewport to the entire window
     int window_width, window_height;
     glfwGetFramebufferSize(window, &window_width, &window_height);
@@ -118,17 +115,18 @@ int main() {
    gluLookAt(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glScalef(1.5f, 1.5f, 1.5f);
-    glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
+   // glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
     // Draw the grid lines
     float size = 20.0f;
     float step = 1.0f;
 
-      // Draw the origin point
-    glPointSize(10.0f);
-    glColor3f(1.0f, 0.0f, 0.0f);
-    glBegin(GL_POINTS);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-    glEnd();
+        // Draw the origin point
+        glPointSize(10.0f);
+        glColor3f(1.0f, 0.0f, 0.0f);
+        glBegin(GL_POINTS);
+       glVertex3f(total_angle_x,total_angle_y, 0.0f);
+      //  glVertex3f(0.0f, 0.0f, 0.0f);
+        glEnd();
 
     // Draw the XY plane
     glColor3f(1.0f, 1.0f, 1.0f);
