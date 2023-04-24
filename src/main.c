@@ -4,6 +4,29 @@
 #include <GLUT/glut.h>
 #include "vendors/SERIAL/serial_port.h"
 #include <math.h>
+#define BUFFER_SIZE 256
+// Function to render text on the window
+void renderText(float x, float y, const char* buffer) {
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();
+    glLoadIdentity();
+    glOrtho(0, 1000, 0, 600, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();
+    glLoadIdentity();
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glColor3f(1.0f, 1.0f, 1.0f);
+    glRasterPos2f(x, y);
+    // Render the string using the built-in bitmap font
+    glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)buffer);
+    glEnable(GL_LIGHTING);
+    glEnable(GL_DEPTH_TEST);
+    glPopMatrix();
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();
+    glMatrixMode(GL_MODELVIEW);
+}
 int main() {
     GLFWwindow* window;
 
@@ -24,21 +47,45 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
 
-  /*
+  
     //
     SerialPort port;
-    const char* port_name = "/dev/tty.usbserial-A9007UX1";  // Change this to the correct port name
+    const char* port_name = "/dev/tty.usbserial-110";  // Change this to the correct port name
     speed_t baudrate = 9600;
     SerialPort_init(&port, port_name, baudrate);
 
-     Check if the object was created successfully
+    // Check if the object was created successfully
     if (SerialPort_get_fd(&port) == -1) {
       return 1;
     }
+    char buffer[BUFFER_SIZE];
+    int bytes_read;
+
+    while (1) {
+        // Read data from the serial port
+        bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
+
+        if (bytes_read > 0) {
+            // Print the data received
+           // printf("Data received: %s\n", buffer);
+            renderText(10, 10, buffer);
+            // Set the position for displaying the text
+          // glWindowPos2f(10, 10);
+
+            // Render the text
+       //   glutBitmapString(GLUT_BITMAP_HELVETICA_18, (const unsigned char*)buffer);
+        }
+
+        // Wait for 5 seconds
+        sleep(5);
+    }
+
+    SerialPort_destroy(&port);
+
 
   
      // use the serial_port object to read and write data
-    char buffer[256];
+   /* char buffer[256];
     int bytes_read = SerialPort_read(&serial_port, buffer, sizeof(buffer));
     printf("Read %d bytes: %s\n", bytes_read, buffer);
 
@@ -115,7 +162,7 @@ int main() {
         glVertex3f(size, 0.0f, i);
     }
     glEnd();
-
+    
     // Swap buffers
     glfwSwapBuffers(window);
 
