@@ -137,21 +137,21 @@ glRotatef(rotate_y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
 glColor3f(1.0f, 0.0f, 0.0f); // red color
 glBegin(GL_LINES);
 glVertex3f(0.0f, 0.0f, 0.0f); // starting point
-glVertex3f(1.0f, 0.0f, 0.0f); // ending point
+glVertex3f(5.0f, 0.0f, 0.0f); // ending point
 glEnd();
 
 // Draw the Y axis
 glColor3f(0.0f, 1.0f, 0.0f); // green color
 glBegin(GL_LINES);
 glVertex3f(0.0f, 0.0f, 0.0f); // starting point
-glVertex3f(0.0f, 1.0f, 0.0f); // ending point
+glVertex3f(0.0f, 5.0f, 0.0f); // ending point
 glEnd();
 
 // Draw the Z axis
 glColor3f(0.0f, 0.0f, 1.0f); // blue color
 glBegin(GL_LINES);
 glVertex3f(0.0f, 0.0f, 0.0f); // starting point
-glVertex3f(0.0f, 0.0f, 1.0f); // ending point
+glVertex3f(0.0f, 0.0f, 5.0f); // ending point
 glEnd();
 
 
