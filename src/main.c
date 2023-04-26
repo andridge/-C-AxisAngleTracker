@@ -153,7 +153,36 @@ glBegin(GL_LINES);
 glVertex3f(0.0f, 0.0f, 0.0f); // starting point
 glVertex3f(0.0f, 0.0f, 5.0f); // ending point
 glEnd();
+// Draw the grid lines on the XY plane
+glColor3f(0.5f, 0.5f, 0.5f); // set the color to gray
+glBegin(GL_LINES); // start drawing lines
+for(float i=1.0f; i<=5.0f; i+=1.0f) { // loop through the x and y values
+    glVertex3f(i, 0.0f, 0.0f); // set the starting point of a line on the x-axis
+    glVertex3f(i, 5.0f, 0.0f); // set the ending point of a line on the x-axis
+    glVertex3f(0.0f, i, 0.0f); // set the starting point of a line on the y-axis
+    glVertex3f(5.0f, i, 0.0f); // set the ending point of a line on the y-axis
+}
+glEnd(); // end drawing lines
 
+// Draw the grid lines on the XZ plane
+glBegin(GL_LINES); // start drawing lines
+for(float i=1.0f; i<=5.0f; i+=1.0f) { // loop through the x and z values
+    glVertex3f(i, 0.0f, 0.0f); // set the starting point of a line on the x-axis
+    glVertex3f(i, 0.0f, 5.0f); // set the ending point of a line on the x-axis
+    glVertex3f(0.0f, 0.0f, i); // set the starting point of a line on the z-axis
+    glVertex3f(5.0f, 0.0f, i); // set the ending point of a line on the z-axis
+}
+glEnd(); // end drawing lines
+
+// Draw the grid lines on the YZ plane
+glBegin(GL_LINES); // start drawing lines
+for(float i=1.0f; i<=5.0f; i+=1.0f) { // loop through the y and z values
+    glVertex3f(0.0f, i, 0.0f); // set the starting point of a line on the y-axis
+    glVertex3f(0.0f, i, 5.0f); // set the ending point of a line on the y-axis
+    glVertex3f(0.0f, 0.0f, i); // set the starting point of a line on the z-axis
+    glVertex3f(0.0f, 5.0f, i); // set the ending point of a line on the z-axis
+}
+glEnd(); // end drawing lines
 
 
     
