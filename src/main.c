@@ -125,20 +125,21 @@ float total_angle_y = 0.0f;
     //float step = 1.0f;
         //
 // Set the object coordinates
-float object_x = 2.0f;
-float object_y = 3.0f;
+float object_x = 3.5f;
+float object_y = 3.5f;
 
 // Calculate the rotation angles from the orientation values
 float x = total_angle_x * M_PI / 180.0f;
 float y = total_angle_y * M_PI / 180.0f;
 
 // Set the color of the square
-glColor3f(1.0f, 0.0f, 0.0f); // red color
+glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
+
 
 
 // Draw the cube
 glPushMatrix();
-glTranslatef(object_x, 0.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
+glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
 glRotatef(x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
 glRotatef(y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
 
