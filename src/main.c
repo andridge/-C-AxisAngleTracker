@@ -124,13 +124,57 @@ float total_angle_y = 0.0f;
     //float size = 20.0f;
     //float step = 1.0f;
         //
-// Calculate the rotation angles from the orientation values
-float rotate_x = total_angle_x * M_PI / 180.0f;
-float rotate_y = total_angle_y * M_PI / 180.0f;
+// Set the object coordinates
+float object_x = 2.0f;
+float object_y = 3.0f;
 
-// Apply rotation transformations
-glRotatef(rotate_x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
-glRotatef(rotate_y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
+// Calculate the rotation angles from the orientation values
+float x = total_angle_x * M_PI / 180.0f;
+float y = total_angle_y * M_PI / 180.0f;
+
+// Set the color of the square
+glColor3f(1.0f, 0.0f, 0.0f); // red color
+
+
+// Draw the cube
+glPushMatrix();
+glTranslatef(object_x, 0.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
+glRotatef(x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
+glRotatef(y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
+
+// Draw bottom square
+glBegin(GL_LINE_LOOP);
+glVertex3f(-0.5f, 0.0f, -0.5f); // bottom left corner
+glVertex3f(0.5f, 0.0f, -0.5f); // bottom right corner
+glVertex3f(0.5f, 0.0f, 0.5f); // top right corner
+glVertex3f(-0.5f, 0.0f, 0.5f); // top left corner
+glEnd();
+
+// Draw top square
+glBegin(GL_LINE_LOOP);
+glVertex3f(-0.5f, 1.0f, -0.5f); // bottom left corner
+glVertex3f(0.5f, 1.0f, -0.5f); // bottom right corner
+glVertex3f(0.5f, 1.0f, 0.5f); // top right corner
+glVertex3f(-0.5f, 1.0f, 0.5f); // top left corner
+glEnd();
+
+// Draw connecting lines
+glBegin(GL_LINES);
+glVertex3f(-0.5f, 0.0f, -0.5f); // bottom left corner
+glVertex3f(-0.5f, 1.0f, -0.5f); // top left corner
+
+glVertex3f(0.5f, 0.0f, -0.5f); // bottom right corner
+glVertex3f(0.5f, 1.0f, -0.5f); // top right corner
+
+glVertex3f(0.5f, 0.0f, 0.5f); // top right corner
+glVertex3f(0.5f, 1.0f, 0.5f); // bottom right corner
+
+glVertex3f(-0.5f, 0.0f, 0.5f); // top left corner
+glVertex3f(-0.5f, 1.0f, 0.5f); // bottom left corner
+glEnd();
+
+glPopMatrix();
+
 
 // Draw your object here
 // Draw the X axis
@@ -183,6 +227,8 @@ for(float i=1.0f; i<=5.0f; i+=1.0f) { // loop through the y and z values
     glVertex3f(0.0f, 5.0f, i); // set the ending point of a line on the z-axis
 }
 glEnd(); // end drawing lines
+
+//
 
 
     
