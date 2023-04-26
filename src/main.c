@@ -118,7 +118,7 @@ float total_angle_y = 0.0f;
     glLoadIdentity();
    gluLookAt(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-    glScalef(4.5f, 4.5f, 4.5f);
+    glScalef(5.5f, 5.5f, 5.5f);
   // glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
     // Draw the grid lines
     //float size = 20.0f;
@@ -127,21 +127,16 @@ float total_angle_y = 0.0f;
 // Set the object coordinates
 float object_x = 3.5f;
 float object_y = 3.5f;
-
-// Calculate the rotation angles from the orientation values
-float x = total_angle_x * M_PI / 180.0f;
-float y = total_angle_y * M_PI / 180.0f;
-
 // Set the color of the square
 glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
 
-
-
-// Draw the cube
+float x = total_angle_x * 10000;
+float y = total_angle_x * 10000;
+//
 glPushMatrix();
 glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
-glRotatef(x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
 glRotatef(y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
+glRotatef(x , 1.0f, 0.0f, 0.0f); // rotate around the x-axis
 
 // Draw bottom square
 glBegin(GL_LINE_LOOP);
