@@ -79,6 +79,9 @@ int bytes_read;
 float total_angle_x = 0.0f;
 float total_angle_y = 0.0f;
 
+// Enable face culling
+
+
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
     //
@@ -90,7 +93,8 @@ float total_angle_y = 0.0f;
         float total_angle_x;
         float total_angle_y;
       //  printf("Total Angle X & Y: %f\n",buffer);
-        sscanf(buffer, "Total Angle X: %f\tTotal Angle Y: %f", &total_angle_x, &total_angle_y);
+  sscanf(buffer, "Total Angle X: %f Total Angle Y: %f", &total_angle_x, &total_angle_y);
+
         printf("Total Angle X: %f\n",total_angle_x);
         printf("Total Angle Y: %f\n",total_angle_y);
     }
@@ -114,52 +118,44 @@ float total_angle_y = 0.0f;
     glLoadIdentity();
    gluLookAt(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
-    glScalef(1.5f, 1.5f, 1.5f);
-   // glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
+    glScalef(4.5f, 4.5f, 4.5f);
+  // glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
     // Draw the grid lines
-    float size = 20.0f;
-    float step = 1.0f;
+    //float size = 20.0f;
+    //float step = 1.0f;
+        //
+// Calculate the rotation angles from the orientation values
+float rotate_x = total_angle_x * M_PI / 180.0f;
+float rotate_y = total_angle_y * M_PI / 180.0f;
 
-        // Draw the origin point
-        glPointSize(10.0f);
-        glColor3f(1.0f, 0.0f, 0.0f);
-        glBegin(GL_POINTS);
-       glVertex3f(total_angle_x,total_angle_y, 0.0f);
-      //  glVertex3f(0.0f, 0.0f, 0.0f);
-        glEnd();
+// Apply rotation transformations
+glRotatef(rotate_x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
+glRotatef(rotate_y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
 
-    // Draw the XY plane
-    glColor3f(1.0f, 1.0f, 1.0f);
-    glBegin(GL_LINES);
-    for (float i = -size; i <= size; i += step) {
-        glVertex3f(i, -size, 0.0f);
-        glVertex3f(i, size, 0.0f);
-        glVertex3f(-size, i, 0.0f);
-        glVertex3f(size, i, 0.0f);
-    }
-    glEnd();
+// Draw your object here
+// Draw the X axis
+glColor3f(1.0f, 0.0f, 0.0f); // red color
+glBegin(GL_LINES);
+glVertex3f(0.0f, 0.0f, 0.0f); // starting point
+glVertex3f(1.0f, 0.0f, 0.0f); // ending point
+glEnd();
 
-    // Draw the XZ plane
-    glColor3f(0.5f, 0.5f, 0.5f);
-    glBegin(GL_LINES);
-    for (float i = -size; i <= size; i += step) {
-        glVertex3f(i, 0.0f, -size);
-        glVertex3f(i, 0.0f, size);
-        glVertex3f(0.0f, -size, i);
-        glVertex3f(0.0f, size, i);
-    }
-    glEnd();
+// Draw the Y axis
+glColor3f(0.0f, 1.0f, 0.0f); // green color
+glBegin(GL_LINES);
+glVertex3f(0.0f, 0.0f, 0.0f); // starting point
+glVertex3f(0.0f, 1.0f, 0.0f); // ending point
+glEnd();
 
-    // Draw the YZ plane
-    glColor3f(0.8f, 0.8f, 0.8f);
-    glBegin(GL_LINES);
-    for (float i = -size; i <= size; i += step) {
-        glVertex3f(0.0f, i, -size);
-        glVertex3f(0.0f, i, size);
-        glVertex3f(-size, 0.0f, i);
-        glVertex3f(size, 0.0f, i);
-    }
-    glEnd();
+// Draw the Z axis
+glColor3f(0.0f, 0.0f, 1.0f); // blue color
+glBegin(GL_LINES);
+glVertex3f(0.0f, 0.0f, 0.0f); // starting point
+glVertex3f(0.0f, 0.0f, 1.0f); // ending point
+glEnd();
+
+
+
     
     // Swap buffers
     glfwSwapBuffers(window);
