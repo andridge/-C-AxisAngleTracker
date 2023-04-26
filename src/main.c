@@ -90,7 +90,7 @@ float total_angle_y = 0.0f;
         float total_angle_x;
         float total_angle_y;
       //  printf("Total Angle X & Y: %f\n",buffer);
-        sscanf(buffer, "Total Angle X: %f Total Angle Y: %f", &total_angle_x, &total_angle_y);
+        sscanf(buffer, "Total Angle X: %f\tTotal Angle Y: %f", &total_angle_x, &total_angle_y);
         printf("Total Angle X: %f\n",total_angle_x);
         printf("Total Angle Y: %f\n",total_angle_y);
     }
