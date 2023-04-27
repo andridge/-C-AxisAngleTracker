@@ -76,8 +76,8 @@ if (SerialPort_get_fd(&port) == -1) {
 
 char buffer[BUFFER_SIZE];
 int bytes_read;
-float total_angle_x = 0.0f;
-float total_angle_y = 0.0f;
+float total_angle_x ;
+float total_angle_y ;
 
 // Enable face culling
 
@@ -90,8 +90,6 @@ float total_angle_y = 0.0f;
 
     if (bytes_read > 0) {
         // Print the data received
-        float total_angle_x;
-        float total_angle_y;
       //  printf("Total Angle X & Y: %f\n",buffer);
       sscanf(buffer, "%*s %*s %f %*s %*s %*s %f", &total_angle_x, &total_angle_y);
         printf("Total Angle X: %f\n",total_angle_x);
