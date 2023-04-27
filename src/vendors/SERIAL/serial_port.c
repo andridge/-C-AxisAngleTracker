@@ -45,6 +45,15 @@ void SerialPort_destroy(SerialPort* port) {
     }
 }
 
+void SerialPort_flush(SerialPort* port) {
+    if (port->fd_ == -1) {
+        return;
+    }
+
+    tcflush(port->fd_, TCIOFLUSH);
+}
+
+
 int SerialPort_read(SerialPort* port, void* buffer, size_t size) {
     if (port->fd_ == -1) {
         return -1;

@@ -43,7 +43,10 @@ int x;
 int y;
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
-    
+    // Set swap interval to 1 millisecond
+    glfwSwapInterval(5);
+    //
+   //SerialPort_flush(&port);
      // Read data from the serial port
     bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
 
@@ -84,10 +87,12 @@ int y;
     // Set the color of the square
     glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
     //
-    glPushMatrix();
-    glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
-    glRotatef(y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
-    glRotatef(x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
+   
+// Inside your main loop, before drawing the cube, update the object position with the previous rotations
+glPushMatrix();
+glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
+glRotatef(y, 0.0f, 1.0f, 0.0f); // apply previous y rotation
+glRotatef(x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
 
     // Draw bottom square
     glBegin(GL_LINE_LOOP);

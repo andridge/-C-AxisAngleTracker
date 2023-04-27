@@ -11,6 +11,7 @@ typedef struct {
 
 void SerialPort_init(SerialPort* port, const char* port_name, speed_t baudrate);
 void SerialPort_destroy(SerialPort* port);
+void SerialPort_flush(SerialPort* port);
 int SerialPort_read(SerialPort* port, void* buffer, size_t size);
 int SerialPort_write(SerialPort* port, const void* data, size_t size);
 int SerialPort_get_fd(const SerialPort* port);
