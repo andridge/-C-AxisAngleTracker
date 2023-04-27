@@ -39,7 +39,8 @@ char buffer[BUFFER_SIZE];
 int bytes_read;
 float total_angle_x ;
 float total_angle_y ;
-
+int x;
+int y;
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
     
@@ -48,9 +49,12 @@ float total_angle_y ;
 
     if (bytes_read > 0) {
       //  printf("Total Angle X & Y: %f\n",buffer);
-        sscanf(buffer, "%*s %*s %f %*s %*s %*s %f", &total_angle_x, &total_angle_y);
-        printf("Total Angle X: %f\n",total_angle_x);
-        printf("Total Angle Y: %f\n",total_angle_y);
+     sscanf(buffer, "%*s %*s %f %*s %*s %*s %f", &total_angle_x, &total_angle_y);
+    x = round(total_angle_x);
+    y = round(total_angle_y);
+    printf("Total Angle X: %d\n", x);
+    printf("Total Angle Y: %d\n", y);
+
     }
 
     // Set viewport to the entire window
@@ -82,8 +86,8 @@ float total_angle_y ;
     //
     glPushMatrix();
     glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
-    glRotatef(total_angle_y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
-    glRotatef(total_angle_x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
+    glRotatef(y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
+    glRotatef(x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
 
     // Draw bottom square
     glBegin(GL_LINE_LOOP);
