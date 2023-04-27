@@ -93,8 +93,7 @@ float total_angle_y = 0.0f;
         float total_angle_x;
         float total_angle_y;
       //  printf("Total Angle X & Y: %f\n",buffer);
-  sscanf(buffer, "Total Angle X: %f Total Angle Y: %f", &total_angle_x, &total_angle_y);
-
+      sscanf(buffer, "%*s %*s %f %*s %*s %*s %f", &total_angle_x, &total_angle_y);
         printf("Total Angle X: %f\n",total_angle_x);
         printf("Total Angle Y: %f\n",total_angle_y);
     }
@@ -119,7 +118,7 @@ float total_angle_y = 0.0f;
    gluLookAt(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glScalef(5.5f, 5.5f, 5.5f);
-  // glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
+   //glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
     // Draw the grid lines
     //float size = 20.0f;
     //float step = 1.0f;
@@ -130,13 +129,13 @@ float object_y = 3.5f;
 // Set the color of the square
 glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
 
-float x = total_angle_x * 10000;
-float y = total_angle_x * 10000;
+//float x = total_angle_x * 10000;
+//float y = total_angle_x * 10000;
 //
 glPushMatrix();
 glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
-glRotatef(y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
-glRotatef(x , 1.0f, 0.0f, 0.0f); // rotate around the x-axis
+glRotatef(total_angle_y, 0.0f, 1.0f, 0.0f); // rotate around the y-axis
+glRotatef(total_angle_x, 1.0f, 0.0f, 0.0f); // rotate around the x-axis
 
 // Draw bottom square
 glBegin(GL_LINE_LOOP);
@@ -203,6 +202,7 @@ for(float i=1.0f; i<=5.0f; i+=1.0f) { // loop through the x and y values
     glVertex3f(5.0f, i, 0.0f); // set the ending point of a line on the y-axis
 }
 glEnd(); // end drawing lines
+
 
 // Draw the grid lines on the XZ plane
 glBegin(GL_LINES); // start drawing lines
