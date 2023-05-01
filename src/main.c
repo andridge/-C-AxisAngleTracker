@@ -46,7 +46,7 @@ int y;
     // Set swap interval to 1 millisecond
     glfwSwapInterval(5);
     //
-   //SerialPort_flush(&port);
+   //
      // Read data from the serial port
     bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
 
@@ -180,7 +180,7 @@ glRotatef(x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
         glVertex3f(0.0f, 5.0f, i); // set the ending point of a line on the z-axis
     }
     glEnd(); // end drawing lines
-
+    SerialPort_flush(&port);
     //
     // Swap buffers
     glfwSwapBuffers(window);
