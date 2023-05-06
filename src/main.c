@@ -26,7 +26,7 @@ int main() {
     glEnable(GL_DEPTH_TEST);
 
 SerialPort port;
-const char* port_name = "/dev/tty.usbserial-110";  // Change this to the correct port name
+const char* port_name = "/dev/tty.usbserial-1110";  // Change this to the correct port name
 speed_t baudrate = 9600;
 SerialPort_init(&port, port_name, baudrate);
 
@@ -41,11 +41,22 @@ float total_angle_x ;
 float total_angle_y ;
 int x;
 int y;
+// Define a smoothing factor
+const float SMOOTHING_FACTOR = 0.1f;
+// Initialize time variables
+float current_time = glfwGetTime();
+float last_time = current_time;
+// Initialize smoothed angles
+float smoothed_angle_x = 0.0f;
+float smoothed_angle_y = 0.0f;
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
     // Set swap interval to 1 millisecond
-    glfwSwapInterval(5);
+    glfwSwapInterval(2);
     //
+    // Calculate elapsed time since last update
+  current_time = glfwGetTime();
+
    //
      // Read data from the serial port
     bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
@@ -53,12 +64,17 @@ int y;
     if (bytes_read > 0) {
       //  printf("Total Angle X & Y: %f\n",buffer);
      sscanf(buffer, "%*s %*s %f %*s %*s %*s %f", &total_angle_x, &total_angle_y);
-    x = round(total_angle_x);
-    y = round(total_angle_y);
+    smoothed_angle_x = smoothed_angle_x * (1.0f - SMOOTHING_FACTOR) + total_angle_x * SMOOTHING_FACTOR;
+  smoothed_angle_y = smoothed_angle_y * (1.0f - SMOOTHING_FACTOR) + total_angle_y * SMOOTHING_FACTOR;
+    // Round the smoothed angles
+  x = round(smoothed_angle_x);
+  y = round(smoothed_angle_y);
     printf("Total Angle X: %d\n", x);
     printf("Total Angle Y: %d\n", y);
 
     }
+ float elapsed_time = current_time - last_time;
+  last_time = current_time;
 
     // Set viewport to the entire window
     int window_width, window_height;
@@ -87,7 +103,9 @@ int y;
     // Set the color of the square
     glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
     //
-   
+   // Update position based on parsed input and elapsed time
+object_x += x * elapsed_time;
+object_y += y * elapsed_time;
 // Inside your main loop, before drawing the cube, update the object position with the previous rotations
 glPushMatrix();
 glTranslatef(object_x, 2.5f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
