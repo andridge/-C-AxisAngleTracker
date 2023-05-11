@@ -89,7 +89,7 @@ float last_time = current_time;
     glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
     // Inside your main loop, before drawing the cube, update the object position with the previous rotations
     glPushMatrix();
-    glTranslatef(2.50f, 0.0f,2.50f); // set the object's position and lift it by 0.5 units along the y-axis
+    glTranslatef(2.50f, 2.5f,2.50f); // set the object's position and lift it by 0.5 units along the y-axis
      glRotatef(total_angle_x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
     glRotatef(total_angle_y, 0.0f, 0.0f, 1.0f); // apply previous y rotation
 
