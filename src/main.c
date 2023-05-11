@@ -52,7 +52,6 @@ int main() {
 float current_time = glfwGetTime();
 float last_time = current_time;
 
-//float alpha = 0.1f; // filter coefficient
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
     // Set swap interval to 1 millisecond
