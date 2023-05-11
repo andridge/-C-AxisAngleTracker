@@ -1,13 +1,11 @@
 #include "vendors/GLFW/glfw3.h"
 #include <stdio.h>
 #include <OpenGL/glu.h>
-//#include <GL/freeglut.h>
 #include "vendors/SERIAL/serial_port.h"
 #include <math.h>
 #include <pthread.h>
-//#include <GL/glut.h> // for glutBitmapString()
-#define BUFFER_SIZE 256
 
+#define BUFFER_SIZE 256
 
 // Declare global variables for shared data
 char buffer[BUFFER_SIZE];
@@ -21,56 +19,10 @@ int y;
 // Define a smoothing factor
 const float SMOOTHING_FACTOR = 0.1f;
 
-
 // Define a mutex for protecting shared data
 pthread_mutex_t data_mutex = PTHREAD_MUTEX_INITIALIZER;
 
-
-void *serial_thread(void *arg) {
-    SerialPort port;
-    const char* port_name = "/dev/tty.usbserial-110";  // Change this to the correct port name
-    speed_t baudrate = 9600;
-    SerialPort_init(&port, port_name, baudrate);
-
-    // Check if the object was created successfully
-    if (SerialPort_get_fd(&port) == -1) {
-        return NULL;
-    }
-
-    char buffer[BUFFER_SIZE];
-    int bytes_read;
-
-    // Define a smoothing factor
-    const float SMOOTHING_FACTOR = 0.1f;
-
-    // Loop indefinitely
-    while (1) {
-        // Read data from the serial port
-        bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
-
-        if (bytes_read > 0) {
-            float x, y, lat, lon;
-            sscanf(buffer, "%*s %*s %f %*s %*s %*s %f %f %f ", &x, &y, &lat, &lon);
-
-            // Acquire the mutex before updating shared data
-            pthread_mutex_lock(&data_mutex);
-
-            total_angle_x = x;
-            total_angle_y = y;
-            latitude = lat;
-            longitude = lon;
-
-            // Release the mutex after updating shared data
-            pthread_mutex_unlock(&data_mutex);
-        }
-    }
-
-    // Close the serial port when done
-  //  SerialPort_close(&port);
-
-    return NULL;
-}
-
+void *serial_thread(void *arg);
 int main() {
 
     GLFWwindow* window;
@@ -118,16 +70,6 @@ if (SerialPort_get_fd(&port) == -1) {
     //
     // Calculate elapsed time since last update
   current_time = glfwGetTime();
-
-   //
-  /*    bytes_read = SerialPort_read(&port, buffer, BUFFER_SIZE);
-
-    if (bytes_read > 0) {
-      //  printf("Total Angle X & Y: %f\n",buffer);
-  sscanf(buffer, "%*s %*s %f %*s %*s %*s %f %f %f ", &total_angle_x, &total_angle_y, &latitude, &longitude);
-  //sscanf(buffer, "Total Angle X: %f Total Angle Y: %f latitude: %f longitude: %f", &total_angle_x, &total_angle_y, &latitude, &longitude);
-*/  // Read data from the serial port
-
   smoothed_angle_x = smoothed_angle_x * (1.0f - SMOOTHING_FACTOR) + total_angle_x * SMOOTHING_FACTOR;
   smoothed_angle_y = smoothed_angle_y * (1.0f - SMOOTHING_FACTOR) + total_angle_y * SMOOTHING_FACTOR;
     // Round the smoothed angles
@@ -135,7 +77,7 @@ if (SerialPort_get_fd(&port) == -1) {
   y = round(smoothed_angle_y);
     printf("Total Angle X: %d\n", x);
     printf("Total Angle Y: %d\n", y);
-  printf("latitude: %d\n", latitude);
+    printf("latitude: %d\n", latitude);
     printf("longitude: %d\n", longitude);
    // }
  float elapsed_time = current_time - last_time;
@@ -161,7 +103,7 @@ if (SerialPort_get_fd(&port) == -1) {
    gluLookAt(50.0f, 50.0f, 50.0f, 0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f);
 
     glScalef(5.5f, 5.5f, 5.5f);
-   //glRotatef(glfwGetTime() * 50.0f, 0.0f, 1.0f, 0.0f);
+ 
     // Set the object coordinates
     float object_x = 3.5f;
     float object_y = 3.5f;
@@ -169,15 +111,14 @@ if (SerialPort_get_fd(&port) == -1) {
     glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
     //
    // Update position based on parsed input and elapsed time
-object_x += x * elapsed_time;
-object_y += y * elapsed_time;
-// Inside your main loop, before drawing the cube, update the object position with the previous rotations
-glPushMatrix();
-glTranslatef(object_x, 0.0f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
-glRotatef(y, 0.0f, 0.0f, 1.0f); // apply previous y rotation
-glRotatef(x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
+    object_x += x * elapsed_time;
+    object_y += y * elapsed_time;
+    // Inside your main loop, before drawing the cube, update the object position with the previous rotations
+    glPushMatrix();
+    glTranslatef(object_x, 0.0f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
+    glRotatef(y, 0.0f, 0.0f, 1.0f); // apply previous y rotation
+    glRotatef(x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
 
-//glTranslatef(-0.5f, -0.5f, -0.5f); // translate the cube to its center
     // Draw bottom square
     glBegin(GL_LINE_LOOP);
     glVertex3f(-0.5f, 0.0f, -0.5f); // bottom left corner
