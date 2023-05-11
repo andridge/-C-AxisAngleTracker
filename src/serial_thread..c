@@ -39,8 +39,9 @@ void *serial_thread(void *arg) {
 
         if (bytes_read > 0) {
             float x, y, lat, lon;
+            //sscanf(buffer, "%*s %*s %f %*s %*s %*s %f %f %f ", &x, &y, &lat, &lon);
             sscanf(buffer, "%*s %*s %f %*s %*s %*s %f %f %f ", &x, &y, &lat, &lon);
-
+          
             // Acquire the mutex before updating shared data
             pthread_mutex_lock(&data_mutex);
 
@@ -48,7 +49,10 @@ void *serial_thread(void *arg) {
             total_angle_y = y;
             latitude = lat;
             longitude = lon;
-
+            printf("Total Angle X: %f\n", total_angle_x);
+            printf("Total Angle Y: %f\n", total_angle_y);
+            printf("latitude: %f\n", latitude);
+            printf("longitude: %f\n", longitude);
             // Release the mutex after updating shared data
             pthread_mutex_unlock(&data_mutex);
         }
