@@ -54,15 +54,7 @@ float last_time = current_time;
 // Initialize smoothed angles
 float smoothed_angle_x = 0.0f;
 float smoothed_angle_y = 0.0f;
-/*SerialPort port;
-const char* port_name = "/dev/tty.usbserial-110";  // Change this to the correct port name
-speed_t baudrate = 9600;
-SerialPort_init(&port, port_name, baudrate);
-
-// Check if the object was created successfully
-if (SerialPort_get_fd(&port) == -1) {
-  return 1;
-}*/
+//float alpha = 0.1f; // filter coefficient
  // Loop until the user closes the window
   while (!glfwWindowShouldClose(window)) {
     // Set swap interval to 1 millisecond
@@ -73,10 +65,10 @@ if (SerialPort_get_fd(&port) == -1) {
   smoothed_angle_x = smoothed_angle_x * (1.0f - SMOOTHING_FACTOR) + total_angle_x * SMOOTHING_FACTOR;
   smoothed_angle_y = smoothed_angle_y * (1.0f - SMOOTHING_FACTOR) + total_angle_y * SMOOTHING_FACTOR;
     // Round the smoothed angles
-  x = round(smoothed_angle_x);
-  y = round(smoothed_angle_y);
-    printf("Total Angle X: %d\n", x);
-    printf("Total Angle Y: %d\n", y);
+  //x = round(smoothed_angle_x);
+  //y = round(smoothed_angle_y);
+    printf("Total Angle X: %d\n", total_angle_x);
+    printf("Total Angle Y: %d\n", total_angle_y);
     printf("latitude: %d\n", latitude);
     printf("longitude: %d\n", longitude);
    // }
@@ -111,14 +103,15 @@ if (SerialPort_get_fd(&port) == -1) {
     glColor3f(1.0f, 0.0f, 1.0f); // purple color (red and blue)
     //
    // Update position based on parsed input and elapsed time
-    object_x += x * elapsed_time;
-    object_y += y * elapsed_time;
+    //object_x += x * elapsed_time;
+   // object_y += y * elapsed_time;
     // Inside your main loop, before drawing the cube, update the object position with the previous rotations
     glPushMatrix();
-    glTranslatef(object_x, 0.0f, object_y); // set the object's position and lift it by 0.5 units along the y-axis
-    glRotatef(y, 0.0f, 0.0f, 1.0f); // apply previous y rotation
-    glRotatef(x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
+    glTranslatef(2.50f, 0.0f,2.50f); // set the object's position and lift it by 0.5 units along the y-axis
+     glRotatef(smoothed_angle_x, 1.0f, 0.0f, 0.0f); // apply previous x rotation
 
+    glRotatef(smoothed_angle_y, 0.0f, 0.0f, 1.0f); // apply previous y rotation
+  
     // Draw bottom square
     glBegin(GL_LINE_LOOP);
     glVertex3f(-0.5f, 0.0f, -0.5f); // bottom left corner
